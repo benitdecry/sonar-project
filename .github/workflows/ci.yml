@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for accurate SonarQube blame and history
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,8 +26,6 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-cov
-          # Install current package in editable mode if setup.py or pyproject.toml exists
-          if [ -f setup.py ] || [ -f pyproject.toml ]; then pip install -e .; fi
 
       - name: Run tests with coverage (produces coverage.xml)
         env:
