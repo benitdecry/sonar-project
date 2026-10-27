@@ -8,15 +8,13 @@ on:
 
 jobs:
   test-and-sonar:
-    # Use 'ubuntu-latest' if SonarQube has a public IP accessible from the internet.
-    # (If your VM has a GitHub self-hosted runner, change this to: self-hosted)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Required for accurate SonarQube analysis
+          fetch-depth: 0  # Required for accurate SonarQube blame and history
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,8 +26,12 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-cov
+          # Install current package in editable mode if setup.py or pyproject.toml exists
+          if [ -f setup.py ] || [ -f pyproject.toml ]; then pip install -e .; fi
 
       - name: Run tests with coverage (produces coverage.xml)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           python -m pytest --cov=my_package --cov-report=xml:coverage.xml --junitxml=pytest-junit.xml
 
