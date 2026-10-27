@@ -31,7 +31,7 @@ jobs:
 
       - name: Run tests with coverage (produces coverage.xml)
         run: |
-          pytest --cov=my_package --cov-report=xml:coverage.xml --junitxml=pytest-junit.xml
+          python -m pytest --cov=my_package --cov-report=xml:coverage.xml --junitxml=pytest-junit.xml
 
       - name: Upload test results (optional)
         if: always()
